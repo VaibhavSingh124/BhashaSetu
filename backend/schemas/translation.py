@@ -37,6 +37,16 @@ class TranslationResponse(BaseModel):
     source_language: str = Field(..., description="Source language code")
     target_language: str = Field(..., description="Target language code")
     original_text: str = Field(..., description="Preprocessed input text")
-    translation: Optional[str] = Field(default=None, description="Translated output text")
+    translated_text: Optional[str] = Field(default=None, description="Translated output text")
+    simplified_text: Optional[str] = Field(default=None, description="Simplified text output")
+    translation: Optional[str] = Field(default=None, description="Alias for translated_text for backward compatibility")
     engine: Optional[str] = Field(default=None, description="Translation engine/model used")
     message: Optional[str] = Field(default=None, description="Additional status message, if any")
+
+
+class SupportedLanguagesResponse(BaseModel):
+    """Response schema for supported languages and language pairs."""
+    status: str = Field(default="success", description="Response status")
+    supported_languages: dict[str, str] = Field(..., description="Mapping of language codes to language names")
+    supported_pairs: list[list[str]] = Field(..., description="List of supported [source, target] language pairs")
+

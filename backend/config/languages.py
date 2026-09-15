@@ -141,3 +141,14 @@ def get_marian_target_tag(target_language: str) -> Optional[str]:
     Returns None if the language has no tag (e.g. it uses a different model).
     """
     return MARIAN_TARGET_TAG.get(target_language)
+
+
+def get_supported_languages() -> Dict[str, str]:
+    """Return a dictionary of all supported language codes and their names."""
+    return dict(SUPPORTED_LANGUAGES)
+
+
+def get_supported_pairs() -> list[list[str]]:
+    """Return a sorted list of supported [source, target] language pairs."""
+    return sorted([[src, tgt] for src, tgt in SUPPORTED_PAIRS])
+

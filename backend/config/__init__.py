@@ -9,6 +9,8 @@ from .languages import (
     is_language_supported,
     is_pair_supported,
     get_language_name,
+    get_supported_languages,
+    get_supported_pairs,
 )
 
 __all__ = [
@@ -19,4 +21,7 @@ __all__ = [
     "is_language_supported",
     "is_pair_supported",
     "get_language_name",
+    "get_supported_languages",
+    "get_supported_pairs",
 ]
+

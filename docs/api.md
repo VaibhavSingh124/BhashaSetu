@@ -13,11 +13,13 @@ Interactive OpenAPI documentation is also served automatically:
 | Method | Endpoint | Purpose | Status |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/` | Backend health check | ✅ Live |
-| `POST` | `/translate` | Indic text translation (En → 10 languages) | ✅ Live (opus-mt-en-mul) |
+| `POST` | `/api/v1/translate` (or `/translate`) | Indic text translation (En → 10 languages) | ✅ Live (opus-mt-en-mul) |
+| `GET` | `/api/v1/supported-languages` (or `/supported-languages`) | List supported languages and pairs | ✅ Live |
 | `POST` | `/speech-to-text` | Speech recognition (ASR) | 🔜 Step 3 |
 | `POST` | `/text-to-speech` | Speech synthesis (TTS) | 🔜 Step 3 |
 | `POST` | `/evaluate` | Pronunciation assessment | 🔜 Step 4 |
 | `POST` | `/lesson` | Lesson material upload | 🔜 Step 5 |
+
 
 ---
 
@@ -88,10 +90,12 @@ Interactive OpenAPI documentation is also served automatically:
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | `status` | `string` | `"success"` |
-| `source_language` | `string` | Source language code |
-| `target_language` | `string` | Target language code |
+| `source_language` | `string` | Source language code (e.g. `"en"`) |
+| `target_language` | `string` | Target language code (e.g. `"pa"`) |
 | `original_text` | `string` | Preprocessed input text |
-| `translation` | `string` | Translated output text |
+| `translated_text` | `string` | Translated output text |
+| `simplified_text` | `string` | Simplified text output (beginner readability) |
+| `translation` | `string` | Alias for `translated_text` (backward compatibility) |
 | `engine` | `string` | Model used for inference |
 | `message` | `string\|null` | Additional note, if any |
 
@@ -101,6 +105,8 @@ Interactive OpenAPI documentation is also served automatically:
   "source_language": "en",
   "target_language": "pa",
   "original_text": "Water is important for life.",
+  "translated_text": "ਜੀਵਨ ਲਈ ਪਾਣੀ ਜ਼ਰੂਰੀ ਹੈ ।",
+  "simplified_text": "ਜੀਵਨ ਲਈ ਪਾਣੀ ਜ਼ਰੂਰੀ ਹੈ ।",
   "translation": "ਜੀਵਨ ਲਈ ਪਾਣੀ ਜ਼ਰੂਰੀ ਹੈ ।",
   "engine": "Helsinki-NLP/opus-mt-en-mul (MarianMT) — CPU inference",
   "message": null
@@ -120,26 +126,73 @@ Interactive OpenAPI documentation is also served automatically:
 
 #### curl Examples
 
-**English → Punjabi**
+**English → Punjabi (`POST /api/v1/translate` or `POST /translate`)**
 ```bash
-curl -X POST http://localhost:8000/translate \
+curl -X POST http://localhost:8000/api/v1/translate \
   -H "Content-Type: application/json" \
   -d '{"text": "Water is important for life.", "source_language": "en", "target_language": "pa"}'
 ```
 
 **English → Hindi**
 ```bash
-curl -X POST http://localhost:8000/translate \
+curl -X POST http://localhost:8000/api/v1/translate \
   -H "Content-Type: application/json" \
   -d '{"text": "Education is the key to success.", "source_language": "en", "target_language": "hi"}'
 ```
 
 **English → Tamil**
 ```bash
-curl -X POST http://localhost:8000/translate \
+curl -X POST http://localhost:8000/api/v1/translate \
   -H "Content-Type: application/json" \
   -d '{"text": "The sun rises in the east.", "source_language": "en", "target_language": "ta"}'
 ```
+
+---
+
+### 3. Supported Languages ✅ LIVE
+
+- **Endpoint**: `/supported-languages` (alias `/api/v1/supported-languages`)
+- **HTTP Method**: `GET`
+- **Purpose**: Returns the list of currently supported language codes, human-readable names, and supported translation direction pairs.
+- **Request Body**: None
+
+#### Response — `200 OK` (`SupportedLanguagesResponse`)
+```json
+{
+  "status": "success",
+  "supported_languages": {
+    "en": "English",
+    "pa": "Punjabi",
+    "hi": "Hindi",
+    "bn": "Bengali",
+    "mr": "Marathi",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "gu": "Gujarati",
+    "kn": "Kannada",
+    "ml": "Malayalam",
+    "ur": "Urdu"
+  },
+  "supported_pairs": [
+    ["en", "bn"],
+    ["en", "gu"],
+    ["en", "hi"],
+    ["en", "kn"],
+    ["en", "ml"],
+    ["en", "mr"],
+    ["en", "pa"],
+    ["en", "ta"],
+    ["en", "te"],
+    ["en", "ur"]
+  ]
+}
+```
+
+#### curl Example
+```bash
+curl -X GET http://localhost:8000/api/v1/supported-languages
+```
+
 
 ---
 

@@ -1,13 +1,19 @@
 """
-BhashaSetu - Translation Routes (Task 2)
-Connects POST /translate to the TranslationService pipeline.
+BhashaSetu - Translation Routes (Step 2)
+Connects /translate and /api/v1/translate to the TranslationService pipeline.
+Provides /supported-languages and /api/v1/supported-languages registry query.
 Handles all validation, language, and model errors with proper HTTP responses.
 """
 
 import logging
 from fastapi import APIRouter, HTTPException, status
 
-from schemas.translation import TranslationRequest, TranslationResponse
+from config.languages import get_supported_languages, get_supported_pairs
+from schemas.translation import (
+    TranslationRequest,
+    TranslationResponse,
+    SupportedLanguagesResponse,
+)
 from services.translator import TranslationService, TranslationError
 
 logger = logging.getLogger(__name__)
@@ -27,17 +33,25 @@ _translation_service = TranslationService()
     description=(
         "Translates input text from the source language to the target language "
         "using a neural machine translation model. "
-        "Currently supports: English (en) → Punjabi (pa)."
+        "Supports English (en) to Punjabi (pa), Hindi (hi), Bengali (bn), "
+        "Marathi (mr), Tamil (ta), Telugu (te), Gujarati (gu), Kannada (kn), "
+        "Malayalam (ml), and Urdu (ur)."
     ),
+)
+@router.post(
+    "/api/v1/translate",
+    response_model=TranslationResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 async def translate(request: TranslationRequest) -> TranslationResponse:
     """
-    POST /translate
+    POST /translate and POST /api/v1/translate
 
     Pipeline:
       1. Preprocess input text (whitespace normalisation).
       2. Validate language codes and pair support.
-      3. Run MarianMT (Helsinki-NLP/opus-mt-en-pun) model inference.
+      3. Run MarianMT (Helsinki-NLP/opus-mt-en-mul) model inference.
       4. Apply simplification pass.
       5. Return structured response.
 
@@ -83,3 +97,29 @@ async def translate(request: TranslationRequest) -> TranslationResponse:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred. Please try again.",
         ) from exc
+
+
+@router.get(
+    "/supported-languages",
+    response_model=SupportedLanguagesResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get supported languages and language pairs",
+    description="Returns dictionary of supported languages and list of supported translation direction pairs.",
+)
+@router.get(
+    "/api/v1/supported-languages",
+    response_model=SupportedLanguagesResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+async def get_languages() -> SupportedLanguagesResponse:
+    """
+    GET /supported-languages and GET /api/v1/supported-languages
+
+    Returns all active supported language codes, names, and allowed pairs.
+    """
+    return SupportedLanguagesResponse(
+        status="success",
+        supported_languages=get_supported_languages(),
+        supported_pairs=get_supported_pairs(),
+    )

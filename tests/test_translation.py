@@ -74,7 +74,41 @@ class TestTranslateEndpointUnit:
         assert data["target_language"] == "pa"
         assert data["original_text"] == "Water is important for life."
         assert data["translation"] == MOCK_TRANSLATION
+        assert data["translated_text"] == MOCK_TRANSLATION
+        assert data["simplified_text"] == MOCK_TRANSLATION
         assert data["engine"] is not None
+
+    def test_api_v1_translate_endpoint(self):
+        """UNIT — POST /api/v1/translate returns expected fields including translated_text and simplified_text."""
+        with patch(
+            "services.translator.TranslationService._run_model",
+            new=mock_run_model,
+        ):
+            resp = client.post("/api/v1/translate", json={
+                "text": "Water is important for life.",
+                "source_language": "en",
+                "target_language": "pa",
+            })
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["status"] == "success"
+        assert data["original_text"] == "Water is important for life."
+        assert data["translated_text"] == MOCK_TRANSLATION
+        assert data["simplified_text"] == MOCK_TRANSLATION
+        assert data["source_language"] == "en"
+        assert data["target_language"] == "pa"
+
+    def test_get_supported_languages_endpoints(self):
+        """UNIT — GET /supported-languages and /api/v1/supported-languages return registry and pairs."""
+        for path in ["/supported-languages", "/api/v1/supported-languages"]:
+            resp = client.get(path)
+            assert resp.status_code == 200
+            data = resp.json()
+            assert data["status"] == "success"
+            assert "pa" in data["supported_languages"]
+            assert data["supported_languages"]["pa"] == "Punjabi"
+            assert ["en", "pa"] in data["supported_pairs"]
+
 
     def test_valid_en_to_hi(self):
         """UNIT — valid English → Hindi request returns success."""

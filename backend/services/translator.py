@@ -149,6 +149,8 @@ class TranslationService:
             "source_language": source_language,
             "target_language": target_language,
             "original_text": cleaned_text,
+            "translated_text": final_translation,
+            "simplified_text": final_translation,
             "translation": final_translation,
             "engine": ACTIVE_ENGINE,
         }
