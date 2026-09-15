@@ -1,5 +1,5 @@
 # =============================================================================
-# BhashaSetu - Backend Dependencies (Step 1 Foundation)
+# BhashaSetu - Backend Dependencies (Step 2 — Translation & NLP Module)
 # =============================================================================
 
 # Core Web Framework & ASGI Server
@@ -10,8 +10,33 @@ uvicorn[standard]>=0.28.0,<1.0.0
 pydantic>=2.6.0,<3.0.0
 python-dotenv>=1.0.1
 
-# HTTP Client (Required for FastAPI TestClient & external calls)
-httpx>=0.27.0,<1.0.0
+# HTTP Client (required for FastAPI TestClient & external calls)
+httpx2>=0.28.0          # httpx2 is the current compatible version for starlette TestClient
 
 # Automated Testing Framework
 pytest>=8.1.0
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Translation & NLP (Step 2)
+# ──────────────────────────────────────────────────────────────────────────────
+
+# HuggingFace transformers — model loading and inference pipeline.
+# Active model: Helsinki-NLP/opus-mt-en-mul (English → 150+ languages, ~300 MB)
+#   - Supports all major Indic scripts via >>lang_tag<< prefix tokens.
+#   - Verified tags: >>pan_Guru<< >>hin<< >>ben<< >>mar<< >>tam<<
+#                   >>tel<< >>guj<< >>kan<< >>mal<< >>urd<<
+# Planned model: ai4bharat/IndicTrans2 (higher quality; requires CUDA GPU)
+transformers>=4.40.0
+
+# SentencePiece — required tokeniser for MarianMT and IndicTrans2
+sentencepiece>=0.1.99
+
+# Recommended for Marian tokenizer (sacremoses is used for detokenisation)
+sacremoses>=0.0.53
+
+# PyTorch (CPU build) — inference backend.
+# Install the CPU-only build to minimise download size (~200 MB vs ~2.5 GB).
+# For GPU / CUDA support, replace with:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+# NOTE: The GPU build is required for IndicTrans2 at production speed.
+torch>=2.0.0

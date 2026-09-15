@@ -1,6 +1,6 @@
 """
 BhashaSetu - Routes Module
-Initializes and aggregates API routers for translation, speech, assessment, and lessons.
+Aggregates API routers for translation, speech, assessment, and lessons.
 """
 
 from .translation import router as translation_router

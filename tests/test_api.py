@@ -29,18 +29,25 @@ def test_root_health_check():
 
 
 def test_translate_endpoint():
-    """Verify POST /translate accepts valid schema and returns placeholder."""
-    payload = {
-        "text": "Hello",
-        "source_language": "en",
-        "target_language": "pa",
-    }
-    response = client.post("/translate", json=payload)
+    """Verify POST /translate works with mocked model (Step 2 — real service connected)."""
+    from unittest.mock import patch
+
+    def mock_run_model(self, text, source, target):
+        return "ਪਾਣੀ ਜੀਵਨ ਲਈ ਮਹੱਤਵਪੂਰਨ ਹੈ।"
+
+    with patch("services.translator.TranslationService._run_model", new=mock_run_model):
+        payload = {
+            "text": "Hello",
+            "source_language": "en",
+            "target_language": "pa",
+        }
+        response = client.post("/translate", json=payload)
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "success"
-    assert data["message"] == "Module will be implemented in the next step"
-    assert data["translation"] is None
+    assert data["source_language"] == "en"
+    assert data["target_language"] == "pa"
+    assert data["translation"] is not None
 
 
 def test_translate_invalid_payload():
