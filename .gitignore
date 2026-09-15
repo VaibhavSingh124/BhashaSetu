@@ -1,0 +1,167 @@
+# =============================================================================
+# BhashaSetu - Root .gitignore
+# =============================================================================
+
+# --- Environment Variables & Sensitive Credentials ---
+# Never commit credentials, secrets, or local environment files
+.env
+.env.local
+.env.*.local
+*.env
+*.pem
+*.key
+*.cert
+*.crt
+secrets.json
+credentials.json
+serviceAccountKey.json
+
+# --- Python & Virtual Environments ---
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+pyvenv.cfg
+pip-selfcheck.json
+.Python
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Machine Learning Models & Weights ---
+# Ignore downloaded/trained large model binaries, weights, and checkpoints
+# Preserve directory structure with .gitkeep
+!models/translation/
+!models/speech/
+!models/tts/
+models/translation/*
+!models/translation/.gitkeep
+models/speech/*
+!models/speech/.gitkeep
+models/tts/*
+!models/tts/.gitkeep
+
+# Global ML model file extensions
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+*.ckpt
+*.tflite
+*.h5
+*.pb
+*.weights
+*.pkl
+*.joblib
+checkpoints/
+wandb/
+
+# --- Datasets & Data Storage ---
+# Ignore raw, processed large datasets and cache while preserving directory structure
+!data/lessons/
+!data/questions/
+data/lessons/*
+!data/lessons/.gitkeep
+data/questions/*
+!data/questions/.gitkeep
+
+# Dataset file extensions
+*.csv
+*.tsv
+*.parquet
+*.jsonl
+*.arrow
+*.tar
+*.tar.gz
+*.zip
+*.7z
+*.rar
+
+# --- SQLite & Local Databases ---
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# --- Flutter / Dart / Mobile Build Artifacts ---
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/build/
+frontend/ios/Flutter/Generated.xcconfig
+frontend/ios/Flutter/flutter_export_environment.sh
+frontend/ios/Flutter/Flutter.podspec
+frontend/ios/Flutter/App.framework
+frontend/ios/Flutter/Flutter.framework
+frontend/android/app/src/main/res/raw/
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/android/key.properties
+*.keystore
+*.jks
+
+# --- IDE & Editor Artifacts ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# --- OS Specific Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# --- Logs & Temporary Files ---
+*.log
+logs/
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
