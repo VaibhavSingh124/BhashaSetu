@@ -5,28 +5,25 @@ Logic and database queries will be implemented in subsequent steps.
 """
 
 from fastapi import APIRouter, status
+from schemas.lessons import LessonUploadRequest, LessonUploadResponse
 
-router = APIRouter(prefix="/lessons", tags=["Lessons"])
+router = APIRouter(tags=["Lessons"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
-async def lessons_status():
+@router.post(
+    "/lesson",
+    response_model=LessonUploadResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Upload or create a lesson",
+    description="Registers new lesson materials and curriculum content. Placeholder endpoint for Step 1 foundation.",
+)
+async def create_lesson(request: LessonUploadRequest) -> LessonUploadResponse:
     """
-    Health / status check endpoint for lessons service.
+    Create or upload a curriculum lesson.
+    Returns a standardized placeholder response during Step 1 foundation.
     """
-    return {
-        "service": "lessons",
-        "status": "initialized",
-        "version": "v1"
-    }
-
-
-@router.get("/list", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def list_lessons():
-    """
-    List available lessons for a selected language track.
-    Implementation deferred to Step 1+.
-    """
-    return {
-        "message": "Lessons list endpoint placeholder. Logic will be implemented in subsequent steps."
-    }
+    return LessonUploadResponse(
+        status="success",
+        message="Module will be implemented in the next step",
+        lesson_id=None,
+    )

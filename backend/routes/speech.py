@@ -5,39 +5,49 @@ Logic and AI model bindings will be implemented in subsequent steps.
 """
 
 from fastapi import APIRouter, status
+from schemas.speech import (
+    SpeechToTextRequest,
+    SpeechToTextResponse,
+    TextToSpeechRequest,
+    TextToSpeechResponse,
+)
 
-router = APIRouter(prefix="/speech", tags=["Speech"])
+router = APIRouter(tags=["Speech"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
-async def speech_status():
+@router.post(
+    "/speech-to-text",
+    response_model=SpeechToTextResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Convert spoken audio to text (ASR)",
+    description="Transcribes audio input in supported Indic languages. Placeholder endpoint for Step 1 foundation.",
+)
+async def speech_to_text(request: SpeechToTextRequest) -> SpeechToTextResponse:
     """
-    Health / status check endpoint for speech service.
+    Convert speech audio to text transcription.
+    Returns a standardized placeholder response during Step 1 foundation.
     """
-    return {
-        "service": "speech",
-        "status": "initialized",
-        "version": "v1"
-    }
+    return SpeechToTextResponse(
+        status="success",
+        message="Module will be implemented in the next step",
+        text=None,
+    )
 
 
-@router.post("/asr", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def speech_to_text():
+@router.post(
+    "/text-to-speech",
+    response_model=TextToSpeechResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Synthesize text to speech audio (TTS)",
+    description="Synthesizes input text into speech audio in supported Indic languages. Placeholder endpoint for Step 1 foundation.",
+)
+async def text_to_speech(request: TextToSpeechRequest) -> TextToSpeechResponse:
     """
-    Convert speech audio to text for supported Indic languages.
-    Implementation deferred to Step 1+.
+    Synthesize text into speech audio.
+    Returns a standardized placeholder response during Step 1 foundation.
     """
-    return {
-        "message": "ASR endpoint placeholder. Logic will be implemented in subsequent steps."
-    }
-
-
-@router.post("/tts", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def text_to_speech():
-    """
-    Synthesize text into speech audio for supported Indic languages.
-    Implementation deferred to Step 1+.
-    """
-    return {
-        "message": "TTS endpoint placeholder. Logic will be implemented in subsequent steps."
-    }
+    return TextToSpeechResponse(
+        status="success",
+        message="Module will be implemented in the next step",
+        audio_url=None,
+    )

@@ -5,28 +5,26 @@ Logic and scoring engines will be implemented in subsequent steps.
 """
 
 from fastapi import APIRouter, status
+from schemas.assessment import EvaluationRequest, EvaluationResponse
 
-router = APIRouter(prefix="/assessment", tags=["Assessment"])
+router = APIRouter(tags=["Assessment"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
-async def assessment_status():
+@router.post(
+    "/evaluate",
+    response_model=EvaluationResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Evaluate pronunciation and fluency",
+    description="Scores spoken audio against target reference text. Placeholder endpoint for Step 1 foundation.",
+)
+async def evaluate(request: EvaluationRequest) -> EvaluationResponse:
     """
-    Health / status check endpoint for assessment service.
+    Evaluate pronunciation accuracy against reference text.
+    Returns a standardized placeholder response during Step 1 foundation.
     """
-    return {
-        "service": "assessment",
-        "status": "initialized",
-        "version": "v1"
-    }
-
-
-@router.post("/evaluate-pronunciation", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def evaluate_pronunciation():
-    """
-    Evaluate user spoken audio against reference phonemes and scripts.
-    Implementation deferred to Step 1+.
-    """
-    return {
-        "message": "Pronunciation assessment endpoint placeholder. Logic will be implemented in subsequent steps."
-    }
+    return EvaluationResponse(
+        status="success",
+        message="Module will be implemented in the next step",
+        score=None,
+        feedback=None,
+    )

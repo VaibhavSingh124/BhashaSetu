@@ -5,28 +5,25 @@ Logic and AI model bindings will be implemented in subsequent steps.
 """
 
 from fastapi import APIRouter, status
+from schemas.translation import TranslationRequest, TranslationResponse
 
-router = APIRouter(prefix="/translation", tags=["Translation"])
+router = APIRouter(tags=["Translation"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
-async def translation_status():
+@router.post(
+    "/translate",
+    response_model=TranslationResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Translate text across Indic languages",
+    description="Translates source text into the target language. Placeholder endpoint for Step 1 foundation.",
+)
+async def translate(request: TranslationRequest) -> TranslationResponse:
     """
-    Health / status check endpoint for translation service.
+    Translate text between supported languages.
+    Returns a standardized placeholder response during Step 1 foundation.
     """
-    return {
-        "service": "translation",
-        "status": "initialized",
-        "version": "v1"
-    }
-
-
-@router.post("/translate", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-async def translate_text():
-    """
-    Translate text between supported Indic languages.
-    Implementation deferred to Step 1+.
-    """
-    return {
-        "message": "Translation endpoint placeholder. Logic will be implemented in subsequent steps."
-    }
+    return TranslationResponse(
+        status="success",
+        message="Module will be implemented in the next step",
+        translation=None,
+    )

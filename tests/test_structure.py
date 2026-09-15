@@ -27,3 +27,25 @@ def test_services_importable():
     assert ASRService is not None
     assert TTSService is not None
     assert EvaluatorService is not None
+
+
+def test_schemas_importable():
+    """Verify that Pydantic schemas can be imported."""
+    from schemas import (
+        TranslationRequest, TranslationResponse,
+        SpeechToTextRequest, SpeechToTextResponse,
+        TextToSpeechRequest, TextToSpeechResponse,
+        EvaluationRequest, EvaluationResponse,
+        LessonUploadRequest, LessonUploadResponse,
+    )
+    assert TranslationRequest is not None
+    assert TranslationResponse is not None
+    assert SpeechToTextRequest is not None
+    assert SpeechToTextResponse is not None
+    assert TextToSpeechRequest is not None
+    assert TextToSpeechResponse is not None
+    assert EvaluationRequest is not None
+    assert EvaluationResponse is not None
+    assert LessonUploadRequest is not None
+    assert LessonUploadResponse is not None
+
